@@ -12,7 +12,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   const initialTopic = topic === "event" ? "Submit an event" : topic === "collection" ? "Feature a collection" : topic === "partnership" ? "Partnership" : "General question";
   return (
     <PageShell>
-      <PageHero title={["Tell us where", "the trail leads."]} text="Questions, event submissions, collection stories, and thoughtful partnership ideas are all welcome." aside={<Image className="page-hero__mark" src="/assets/hobby-trail-logo-mark.png" alt="Hobby Trail bear mascot" width={220} height={220} />} />
+      <PageHero title={["Tell us where", "the trail leads."]} text="Questions, event submissions, collection stories, and thoughtful partnership ideas are all welcome." aside={<Image className="page-hero__mark" src="/assets/brand/logo-badge.png" alt="Hobby Trail bear mascot" width={1024} height={1024} />} />
       <section className="content-section contact-page"><div className="content-container contact-page__grid">
         <div className="contact-page__intro">
           <h2>What happens next</h2>

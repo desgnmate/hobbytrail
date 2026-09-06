@@ -306,7 +306,7 @@ export default async function Home() {
                 <p>Organize your cards and build a collection you&apos;re proud of.</p>
               </Reveal>
               <div className="collector-path__mascot">
-                <Image src="/generated/collector-journey.png" alt="Hobby Trail collector mascot hiking along a mountain trail" width={724} height={543} />
+                <Image src="/generated/collector-journey-cartoon.png" alt="Cartoon Hobby Trail collector mascot hiking along a mountain trail" width={724} height={543} />
               </div>
               <Reveal className="path-stop path-stop--three" delay={0.12}>
                 <ShieldCheck size={72} />
@@ -399,7 +399,7 @@ export default async function Home() {
         <section className="about-strip" aria-labelledby="home-about-title">
           <div className="container about-strip__content">
             <div className="about-strip__copy"><p className="detail-kicker detail-kicker--light">About Hobby Trail</p><h2 id="home-about-title">More than cards. A place for every kind of hobbyist.</h2><p>Hobby Trail brings Pokémon and TCGs together with collectibles, gaming, creators, vendors, and the communities that make each interest worth sharing.</p><div className="button-row"><Link className="button button--light" href="/about">Why Hobby Trail <ArrowRight size={18} /></Link><Link className="button button--yellow" href="/vendors">Vendor expression of interest</Link></div><nav className="about-strip__route" aria-label="Explore Hobby Trail"><Link href="/events"><span>01</span><strong>Find a room</strong><ArrowRight size={16} /></Link><Link href="/collections"><span>02</span><strong>See collections</strong><ArrowRight size={16} /></Link><Link href="/guides"><span>03</span><strong>Learn together</strong><ArrowRight size={16} /></Link></nav></div>
-            <div className="about-strip__visual"><span className="about-strip__badge"><MapPin size={15} weight="fill" /> Melbourne, Australia</span><div className="about-strip__art"><Image src="/assets/hobby-trail-logo-main.png" alt="Hobby Trail mascot carrying cards, a camera, and an art brush" width={720} height={364} /></div></div>
+            <div className="about-strip__visual"><span className="about-strip__badge"><MapPin size={15} weight="fill" /> Melbourne, Australia</span><div className="about-strip__art"><Image src="/assets/brand/logo-mascot.png" alt="Hobby Trail mascot carrying cards, a camera, and an art brush" width={924} height={1013} /></div></div>
           </div>
         </section>
       </main>

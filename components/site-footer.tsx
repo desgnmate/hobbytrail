@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { PawPrint } from "@phosphor-icons/react/dist/ssr";
 import { NewsletterForm } from "@/components/newsletter-form";
 
 export function SiteFooter() {
@@ -20,7 +19,7 @@ export function SiteFooter() {
       <div className="site-footer">
         <div className="site-footer__grid">
           <div className="site-footer__brand">
-            <Image src="/assets/hobby-trail-footer-logo.png" alt="Hobby Trail" width={206} height={197} />
+            <Image src="/assets/brand/logo-stacked.png" alt="Hobby Trail mascot and stacked wordmark" width={1045} height={998} />
             <p>Follow your hobby. Build your collection.<br />You&apos;re not alone on the trail.</p>
           </div>
           <div>
@@ -53,7 +52,6 @@ export function SiteFooter() {
         <div className="site-footer__fineprint">
           <p>© 2026 Hobby Trail. All rights reserved.</p>
           <p>Hobby Trail and the Hobby Trail logo are trademarks of Hobby Trail Inc.</p>
-          <PawPrint className="site-footer__paw" size={38} weight="fill" aria-hidden="true" />
         </div>
       </div>
     </footer>

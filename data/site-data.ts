@@ -142,7 +142,7 @@ export const collections: Collection[] = [
     game: "Fantasy TCG",
     era: "Modern",
     format: "Raw cards",
-    image: "/generated/collection-binder.png",
+    image: "/stock/collection-encased-card.jpg",
     summary: "A dark-fantasy binder built around moonlit landscapes, quiet spellcraft, and silver details.",
     story: [
       "Mika started the binder with one card pulled during a rainy weekend. The art, more than the rarity, set the direction for everything that followed.",
@@ -157,7 +157,7 @@ export const collections: Collection[] = [
     game: "Adventure TCG",
     era: "Mixed eras",
     format: "Raw and graded",
-    image: "/generated/community-table.png",
+    image: "/stock/collection-protected-cards.jpg",
     summary: "A personal history of starter companions, organized by the games and friends connected to each card.",
     story: [
       "This collection is less about completing a set and more about remembering when each game entered Paolo's life.",
@@ -172,7 +172,7 @@ export const collections: Collection[] = [
     game: "Classic TCG",
     era: "1999-2006",
     format: "Graded",
-    image: "/generated/card-care.png",
+    image: "/stock/collection-charizard-display.jpg",
     summary: "A carefully protected archive of the cards that defined Ana's first years in the hobby.",
     story: [
       "Ana rebuilt a childhood collection one card at a time, beginning with the same artwork she remembered carrying to school.",
@@ -223,7 +223,7 @@ export const guides: Guide[] = [
     title: "How to protect every card you care about",
     category: "Collecting",
     readTime: "7 min read",
-    image: "/generated/card-care.png",
+    image: "/stock/guide-protect-cards.jpg",
     summary: "The essential tools and habits that keep a collection safe without making the hobby complicated.",
     intro: "Good protection starts with knowing which cards need daily-play durability and which need long-term storage.",
     sections: [
@@ -238,7 +238,7 @@ export const guides: Guide[] = [
     title: "Your first local event",
     category: "Play",
     readTime: "5 min read",
-    image: "/generated/community-table.png",
+    image: "/stock/guide-first-event.jpg",
     summary: "What to expect, what to bring, and how to enjoy your first event from round one.",
     intro: "A local event should feel like a welcoming room full of people who already understand why the hobby matters to you.",
     sections: [
@@ -253,7 +253,7 @@ export const guides: Guide[] = [
     title: "A beginner's guide to card condition",
     category: "Care",
     readTime: "6 min read",
-    image: "/generated/collection-binder.png",
+    image: "/stock/guide-card-condition.jpg",
     summary: "Learn the surfaces, edges, corners, and centering cues that shape a card's condition.",
     intro: "Condition is an observation, not a guarantee. A consistent inspection routine helps you describe a card fairly and make better decisions.",
     sections: [

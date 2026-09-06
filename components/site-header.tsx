@@ -22,7 +22,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
     <header className={`site-header${overlay ? " site-header--overlay" : ""}`}>
       <nav className="site-nav" aria-label="Main navigation">
         <Link className="site-nav__logo" href="/" aria-label="Hobby Trail home" onClick={() => setOpen(false)}>
-          <Image src="/assets/hobby-trail-nav-logo.png" alt="Hobby Trail" width={152} height={64} />
+          <Image src="/assets/brand/logo-wordmark.png" alt="Hobby Trail wordmark" width={973} height={408} />
         </Link>
 
         <button

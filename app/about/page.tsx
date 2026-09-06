@@ -12,7 +12,7 @@ export default function AboutPage() {
       <section className="about-hero">
         <div className="about-hero__content">
           <div><h1 aria-label="The hobby is a journey worth sharing."><span aria-hidden="true">The hobby is a journey</span><span aria-hidden="true">worth sharing.</span></h1><p>Hobby Trail brings Pokémon, TCGs, collectibles, gaming, creators, vendors, and curious newcomers together in welcoming real-world spaces.</p></div>
-          <Image src="/assets/hobby-trail-logo-main.png" alt="Hobby Trail mascot with cards, camera, and art brush" width={720} height={364} preload />
+          <Image src="/assets/brand/logo-horizontal.png" alt="Hobby Trail mascot with cards, camera, and art brush" width={1013} height={512} preload />
         </div>
       </section>
       <section className="section section--white about-story"><div className="container">

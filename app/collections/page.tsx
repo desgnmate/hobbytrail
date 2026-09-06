@@ -11,7 +11,7 @@ export default async function CollectionsPage() {
   const collections = await getCollections();
   return (
     <PageShell>
-      <PageHero title={["Every binder", "tells a story."]} text="Explore thoughtful collections built around artwork, memories, eras, and the simple joy of the search." aside={<Image className="page-hero__mark" src="/assets/hobby-trail-logo-mark.png" alt="Hobby Trail collector mascot" width={230} height={230} />} />
+      <PageHero title={["Every binder", "tells a story."]} text="Explore thoughtful collections built around artwork, memories, eras, and the simple joy of the search." aside={<Image className="page-hero__mark" src="/assets/brand/logo-badge.png" alt="Hobby Trail collector mascot" width={1024} height={1024} />} />
       <section className="content-section"><div className="content-container"><CollectionExplorer collections={collections} /></div></section>
     </PageShell>
   );

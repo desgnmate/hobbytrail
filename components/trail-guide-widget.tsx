@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   ArrowRight,
@@ -43,7 +44,7 @@ const guideLinks = [
 export function TrailGuideWidget() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const hiddenFromCms = pathname.startsWith("/studio");
+  const hiddenFromCms = pathname.startsWith("/studio") || pathname.startsWith("/admin");
   const panelId = useId();
   const titleId = useId();
   const widgetRef = useRef<HTMLElement>(null);
@@ -86,7 +87,7 @@ export function TrailGuideWidget() {
         >
           <div className="trail-guide-widget__heading">
             <span className="trail-guide-widget__kicker">
-              <Compass size={16} weight="fill" aria-hidden="true" />
+              <Image className="trail-guide-widget__kicker-logo" src="/assets/brand/logo-flag.png" alt="" width={30} height={24} aria-hidden="true" />
               Quick trail guide
             </span>
             <h2 id={titleId}>Where are you headed?</h2>

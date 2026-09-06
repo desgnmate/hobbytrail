@@ -12,73 +12,76 @@ import {
   type Testimonial,
   type TicketStatus,
 } from "@/data/site-data";
-import { sanityClient } from "@/lib/cms/client";
-import { draftMode } from "next/headers";
+import { supabasePublic } from "@/lib/supabase/public";
 
 type RawEvent = Omit<HobbyEvent, "month" | "day" | "weekday" | "time" | "endTime"> & {
   endDate?: string;
 };
 
-const eventsQuery = `*[_type == "event" && defined(slug.current)] | order(startDate asc) {
-  "slug": slug.current,
-  title,
-  "date": startDate,
-  endDate,
-  game,
-  "type": category,
-  level,
-  "venue": coalesce(venue->name, venueName),
-  "address": coalesce(venue->address, address),
-  "city": coalesce(venue->city, city),
-  fee,
-  capacity,
-  status,
-  ticketStatus,
-  ticketUrl,
-  "image": coalesce(image.asset->url, "/stock/events-card-table.jpg"),
-  description,
-  bring
-}`;
+type SupabaseRow = Record<string, unknown>;
 
-const collectionsQuery = `*[_type == "collection" && defined(slug.current)] | order(featured desc, _updatedAt desc) {
-  "slug": slug.current,
-  title,
-  curator,
-  game,
-  era,
-  format,
-  "image": coalesce(image.asset->url, "/stock/collection-overview.jpg"),
-  summary,
-  story,
-  highlights
-}`;
+function rowString(row: SupabaseRow, field: string, fallback = "") {
+  const value = row[field];
+  return typeof value === "string" ? value : value == null ? fallback : String(value);
+}
 
-const guidesQuery = `*[_type == "guide" && defined(slug.current)] | order(featured desc, publishedAt desc) {
-  "slug": slug.current,
-  title,
-  category,
-  readTime,
-  "image": coalesce(image.asset->url, "/stock/guide-protect-cards.jpg"),
-  summary,
-  intro,
-  sections[]{heading, body}
-}`;
+function rowBoolean(row: SupabaseRow, field: string) {
+  return row[field] === true;
+}
 
-const sponsorsQuery = `*[_type == "sponsor" && active == true] | order(order asc, name asc) {
-  name,
-  tier,
-  "logo": logo.asset->url,
-  url,
-  description
-}`;
+function rowArray(row: SupabaseRow, field: string) {
+  return Array.isArray(row[field]) ? row[field].map((value) => String(value)).filter(Boolean) : [];
+}
 
-const testimonialsQuery = `*[_type == "testimonial" && approved == true] | order(featured desc, _updatedAt desc) {
-  quote,
-  name,
-  role,
-  organization,
-  audience
-}`;
+async function getPublishedRows(table: string, orderBy = "updated_at") {
+  if (!supabasePublic) return null;
+  const { data, error } = await supabasePublic
+    .from(table)
+    .select("*")
+    .eq("published", true)
+    .order(orderBy, { ascending: orderBy === "display_order" });
+  if (error || !data?.length) return null;
+  return data as SupabaseRow[];
+}
+
+function mapSupabaseEvent(row: SupabaseRow): RawEvent {
+  return {
+    slug: rowString(row, "slug"),
+    title: rowString(row, "title"),
+    date: rowString(row, "start_date"),
+    endDate: rowString(row, "end_date"),
+    game: rowString(row, "game"),
+    type: rowString(row, "category"),
+    level: rowString(row, "level"),
+    venue: rowString(row, "venue_name"),
+    address: rowString(row, "address"),
+    city: rowString(row, "city"),
+    fee: rowString(row, "fee"),
+    capacity: rowString(row, "capacity"),
+    status: rowString(row, "status") as EventStatus,
+    ticketStatus: rowString(row, "ticket_status") as TicketStatus,
+    ticketUrl: rowString(row, "ticket_url") || undefined,
+    image: rowString(row, "image") || "/stock/events-card-table.jpg",
+    description: rowString(row, "description"),
+    bring: rowArray(row, "bring"),
+  };
+}
+
+function mapSupabaseGuide(row: SupabaseRow): Guide {
+  const sections = Array.isArray(row.sections)
+    ? row.sections.filter((section): section is Record<string, unknown> => Boolean(section) && typeof section === "object").map((section) => ({ heading: rowString(section, "heading"), body: rowString(section, "body") })).filter((section) => section.heading && section.body)
+    : [];
+  return {
+    slug: rowString(row, "slug"),
+    title: rowString(row, "title"),
+    category: rowString(row, "category"),
+    readTime: rowString(row, "read_time"),
+    image: rowString(row, "image") || "/stock/guide-protect-cards.jpg",
+    summary: rowString(row, "summary"),
+    intro: rowString(row, "intro"),
+    sections,
+  };
+}
 
 function formatEvent(event: RawEvent): HobbyEvent {
   const start = new Date(event.date);
@@ -107,26 +110,10 @@ function formatEvent(event: RawEvent): HobbyEvent {
   };
 }
 
-async function fetchContent<T>(query: string, fallback: T, tag: string): Promise<T> {
-  if (!sanityClient) return fallback;
-
-  try {
-    const { isEnabled } = await draftMode();
-    const client = isEnabled && process.env.SANITY_API_TOKEN
-      ? sanityClient.withConfig({ token: process.env.SANITY_API_TOKEN, perspective: "drafts", useCdn: false, stega: { enabled: true, studioUrl: "/studio" } })
-      : sanityClient;
-    return await client.fetch<T>(query, {}, { next: { revalidate: isEnabled ? 0 : 60, tags: [tag, "cms-content"] } });
-  } catch {
-    // A CMS outage must not take down the public website. Existing approved
-    // local content remains available until the connection recovers.
-    return fallback;
-  }
-}
-
 export async function getEvents(): Promise<HobbyEvent[]> {
-  const fetched = await fetchContent<RawEvent[]>(eventsQuery, localEvents, "event");
-  const raw = fetched.length ? fetched : localEvents;
-  return raw.map((event) => ("month" in event ? event as HobbyEvent : formatEvent(event)));
+  const supabaseEvents = await getPublishedRows("events", "start_date");
+  if (supabaseEvents) return supabaseEvents.map(mapSupabaseEvent).map((event) => formatEvent(event));
+  return localEvents.map((event) => ("month" in event ? event as HobbyEvent : formatEvent(event)));
 }
 
 export async function getEvent(slug: string): Promise<HobbyEvent | undefined> {
@@ -134,8 +121,23 @@ export async function getEvent(slug: string): Promise<HobbyEvent | undefined> {
 }
 
 export async function getCollections(): Promise<Collection[]> {
-  const fetched = await fetchContent<Collection[]>(collectionsQuery, localCollections, "collection");
-  return fetched.length ? fetched : localCollections;
+  const supabaseCollections = await getPublishedRows("collections");
+  if (supabaseCollections) {
+    return supabaseCollections.map((row) => ({
+      slug: rowString(row, "slug"),
+      title: rowString(row, "title"),
+      curator: rowString(row, "curator"),
+      game: rowString(row, "game"),
+      era: rowString(row, "era"),
+      format: rowString(row, "format"),
+      image: rowString(row, "image") || "/stock/collection-overview.jpg",
+      summary: rowString(row, "summary"),
+      story: rowArray(row, "story"),
+      highlights: rowArray(row, "highlights"),
+    }));
+  }
+
+  return localCollections;
 }
 
 export async function getCollection(slug: string): Promise<Collection | undefined> {
@@ -143,8 +145,10 @@ export async function getCollection(slug: string): Promise<Collection | undefine
 }
 
 export async function getGuides(): Promise<Guide[]> {
-  const fetched = await fetchContent<Guide[]>(guidesQuery, localGuides, "guide");
-  return fetched.length ? fetched : localGuides;
+  const supabaseGuides = await getPublishedRows("guides", "published_at");
+  if (supabaseGuides) return supabaseGuides.map(mapSupabaseGuide);
+
+  return localGuides;
 }
 
 export async function getGuide(slug: string): Promise<Guide | undefined> {
@@ -152,11 +156,33 @@ export async function getGuide(slug: string): Promise<Guide | undefined> {
 }
 
 export async function getSponsors(): Promise<Sponsor[]> {
-  return fetchContent(sponsorsQuery, localSponsors, "sponsor");
+  const supabaseSponsors = await getPublishedRows("sponsors", "display_order");
+  if (supabaseSponsors) {
+    return supabaseSponsors.filter((row) => rowBoolean(row, "active")).map((row) => ({
+      name: rowString(row, "name"),
+      tier: rowString(row, "tier") as Sponsor["tier"],
+      logo: rowString(row, "logo"),
+      url: rowString(row, "url") || undefined,
+      description: rowString(row, "description") || undefined,
+    }));
+  }
+
+  return localSponsors;
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {
-  return fetchContent(testimonialsQuery, localTestimonials, "testimonial");
+  const supabaseTestimonials = await getPublishedRows("testimonials");
+  if (supabaseTestimonials) {
+    return supabaseTestimonials.filter((row) => rowBoolean(row, "approved")).map((row) => ({
+      quote: rowString(row, "quote"),
+      name: rowString(row, "name"),
+      role: rowString(row, "role"),
+      organization: rowString(row, "organization") || undefined,
+      audience: rowString(row, "audience") as Testimonial["audience"],
+    }));
+  }
+
+  return localTestimonials;
 }
 
 export const eventStatusOptions: EventStatus[] = ["Open", "Filling fast", "Sold out"];

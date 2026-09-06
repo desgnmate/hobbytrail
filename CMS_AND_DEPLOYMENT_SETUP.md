@@ -1,42 +1,33 @@
 # Hobby Trail CMS and deployment setup
 
-The public site works with approved local fallback content until Sanity and the form destinations are connected. No live credentials belong in this repository.
+The public site and `/studio` content dashboard use Supabase as the only CMS. The small local records in `data/site-data.ts` are development-safe fallback content; production content is read from published Supabase rows.
 
-## Account ownership
+## Supabase setup
 
-- Vercel account: `hello@desgnmate.com`
-- Authentication: start the official Vercel CLI login flow at deployment time and give the account owner the one-time URL produced by the CLI.
-- Never request or store the account password in project files or chat.
+1. Add these variables to local development and Vercel Development, Preview, and Production environments:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY` (server-only)
+2. Run `supabase/migrations/20260904000000_hobby_trail_cms.sql` in the Supabase SQL editor.
+3. Create the first editor in Supabase Auth → Users with email/password.
+4. Insert that Auth user’s UUID into `public.cms_admins`.
+5. Open `/studio` and confirm the dashboard can create, edit, publish, and delete records.
 
-## Sanity connection
+The public site reads only published content. CMS mutations run through authenticated server handlers and revalidate the homepage, Events, Collections, Guides, About, Contact, and calendar routes.
 
-1. Sign in to the approved Vercel account.
-2. Link or create the Vercel project.
-3. Install Sanity through the Vercel Marketplace, or create a Sanity project owned by the client.
-4. Copy the variables listed in `.env.example` into the Development, Preview, and Production environments.
-5. Open `/studio` and confirm the Event, Venue, Sponsor, Testimonial, Collection, Guide, Page, and Site Settings document types.
-6. Configure the Sanity revalidation webhook to send signed POST requests to `/api/revalidate`.
-7. Configure the Studio preview URL to `/api/draft?secret=<SANITY_DRAFT_SECRET>&slug=/`.
+## Vercel deployment
 
-## Forms
+- Use the approved `hello@desgnmate.com` Vercel account.
+- Add the three Supabase variables before deploying so Supabase Storage images are allowed by the Next.js image configuration.
+- Never paste the service-role/secret key into a client component, repository, screenshot, or public environment variable.
+- After changing production environment variables, trigger a new deployment.
 
-Provide secure JSON webhook endpoints for:
+## Forms and content readiness
 
-- `CONTACT_FORM_WEBHOOK_URL`
-- `NEWSLETTER_FORM_WEBHOOK_URL`
-- `VENDOR_EOI_WEBHOOK_URL`
+The existing contact, newsletter, and Vendor EOI forms still require approved webhook destinations before they are operational. Configure `CONTACT_FORM_WEBHOOK_URL`, `NEWSLETTER_FORM_WEBHOOK_URL`, and `VENDOR_EOI_WEBHOOK_URL` when those endpoints are ready.
 
-Until those endpoints exist, the website returns an explicit service-unavailable message and does not pretend that a submission succeeded.
-
-## Content required before launch
-
-- Verified ticket or registration URL and ticket status for every published event
-- Approved sponsor names, tiers, logos, links, and usage permission
-- Approved attendee/vendor testimonials and publication permission
-- Final public brand wording: `The Hobby Trail` or `Hobby Trail`
-- Public contact email and official social links
-- Final production domain for `NEXT_PUBLIC_SITE_URL`
+Before launch, add verified event ticket URLs, Melbourne/Australia venue details, approved sponsor logos and links, approved testimonials, the public contact email, and official social links through the CMS.
 
 ## Release checks
 
-Run `npm run lint`, `npm run typecheck`, and `npm run build`, then test CMS publishing, draft preview, event calendar updates, ticket-state changes, each form webhook, responsive navigation, and keyboard navigation.
+Run `npm run lint`, `npm run typecheck`, and `npm run build`. Then test CMS sign-in, create/edit/publish/unpublish flows, event calendar updates, ticket links, form delivery, responsive navigation, and keyboard accessibility.

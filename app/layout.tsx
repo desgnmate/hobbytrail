@@ -3,10 +3,7 @@ import { DM_Sans, Lilita_One } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import { SmoothScroll } from "@/components/smooth-scroll";
-import { PreviewBanner } from "@/components/preview-banner";
 import { TrailGuideWidget } from "@/components/trail-guide-widget";
-import { VisualEditing } from "next-sanity/visual-editing";
-import { draftMode } from "next/headers";
 
 const display = Lilita_One({
   weight: "400",
@@ -29,18 +26,17 @@ export const metadata: Metadata = {
     description: "Collect what you love. Find your people.",
     images: [{ url: "/assets/hobby-trail-hero-final.png", width: 1920, height: 1024, alt: "Hobby Trail mascot exploring a mountain trail" }],
   },
-  icons: { icon: "/assets/hobby-trail-logo-mark.png", apple: "/assets/hobby-trail-logo-mark.png" },
+  icons: { icon: "/assets/brand/logo-badge.png", apple: "/assets/brand/logo-badge.png" },
 };
 
-export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const { isEnabled: isDraftMode } = await draftMode();
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hobbytrail.example";
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Hobby Trail",
     url: siteUrl,
-    logo: `${siteUrl}/assets/hobby-trail-logo-main.png`,
+    logo: `${siteUrl}/assets/brand/logo-horizontal.png`,
     description: "An event platform for Pokémon, TCGs, collectibles, gaming, creators, vendors, and hobby communities.",
   };
 
@@ -48,11 +44,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en" className={`${display.variable} ${body.variable}`} data-scroll-behavior="smooth">
       <body>
         <SmoothScroll />
-        <PreviewBanner />
         <a className="skip-link" href="#main-content">Skip to content</a>
         {children}
         <TrailGuideWidget />
-        {isDraftMode && <VisualEditing />}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       </body>
     </html>
