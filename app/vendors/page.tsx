@@ -7,6 +7,7 @@ import { VendorEoiForm } from "@/components/vendor-eoi-form";
 export const metadata: Metadata = {
   title: "Vendor expression of interest",
   description: "Apply to exhibit, sell, or showcase your work at a Hobby Trail event.",
+  alternates: { canonical: "/vendors" },
 };
 
 export default function VendorsPage() {

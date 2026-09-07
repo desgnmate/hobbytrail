@@ -15,8 +15,8 @@ const publicPaths: Record<CmsResource, string[]> = {
   settings: ["/", "/about", "/contact"],
 };
 
-function getResource(request: Request) {
-  const resource = new URL(request.url).pathname.split("/").at(-1) ?? "";
+async function getResource(context: { params: Promise<{ resource: string }> }) {
+  const { resource } = await context.params;
   return isCmsResource(resource) ? resource : null;
 }
 
@@ -39,8 +39,8 @@ function revalidateResource(resource: CmsResource) {
   if (resource === "guides") revalidatePath("/guides/[slug]", "page");
 }
 
-export async function GET(request: Request) {
-  const resource = getResource(request);
+export async function GET(request: Request, context: { params: Promise<{ resource: string }> }) {
+  const resource = await getResource(context);
   if (!resource) return NextResponse.json({ error: "Unknown CMS resource." }, { status: 404 });
 
   try {
@@ -60,8 +60,8 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
-  const resource = getResource(request);
+export async function POST(request: Request, context: { params: Promise<{ resource: string }> }) {
+  const resource = await getResource(context);
   if (!resource) return NextResponse.json({ error: "Unknown CMS resource." }, { status: 404 });
   if (!isSameOrigin(request)) return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
 

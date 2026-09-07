@@ -1,9 +1,20 @@
 import { NextResponse } from "next/server";
 import { isSameOrigin } from "@/lib/cms/request-security";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
   if (!isSameOrigin(request)) return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
+
+  const clientIp = getClientIp(request);
+  const rateLimit = checkRateLimit(`cms-login:${clientIp}`, 5, 15 * 60 * 1000);
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many failed sign in attempts. Please wait 15 minutes before trying again." },
+      { status: 429, headers: { "Retry-After": Math.ceil((rateLimit.resetAt - Date.now()) / 1000).toString() } }
+    );
+  }
+
   const client = await createSupabaseServerClient();
   if (!client) return NextResponse.json({ error: "Supabase is not configured." }, { status: 503 });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
 
@@ -8,31 +8,35 @@ const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
 
 export function SmoothScroll() {
   const pathname = usePathname();
+  const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    if (pathname.startsWith("/admin") || pathname.startsWith("/studio")) return;
+    if (pathname.startsWith("/admin") || pathname.startsWith("/studio")) {
+      lenisRef.current?.destroy();
+      lenisRef.current = null;
+      return;
+    }
 
     const motionPreference = window.matchMedia(reducedMotionQuery);
-    let lenis: Lenis | null = null;
 
     const syncScrollPreference = () => {
       if (motionPreference.matches) {
-        lenis?.destroy();
-        lenis = null;
+        lenisRef.current?.destroy();
+        lenisRef.current = null;
         return;
       }
 
-      if (!lenis) {
-        lenis = new Lenis({
+      if (!lenisRef.current) {
+        lenisRef.current = new Lenis({
           anchors: {
-            duration: 0.95,
+            duration: 0.8,
             offset: -96,
           },
           autoRaf: true,
-          lerp: 0.085,
+          lerp: 0.09,
           smoothWheel: true,
           stopInertiaOnNavigate: true,
-          wheelMultiplier: 0.9,
+          wheelMultiplier: 0.95,
         });
       }
     };
@@ -42,9 +46,15 @@ export function SmoothScroll() {
 
     return () => {
       motionPreference.removeEventListener("change", syncScrollPreference);
-      lenis?.destroy();
     };
   }, [pathname]);
+
+  useEffect(() => {
+    return () => {
+      lenisRef.current?.destroy();
+      lenisRef.current = null;
+    };
+  }, []);
 
   return null;
 }

@@ -9,6 +9,7 @@ import { getEvents } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Events",
   description: "Find Pokémon, TCG, collectibles, gaming, creator, trading, and community events near you.",
+  alternates: { canonical: "/events" },
 };
 
 export default async function EventsPage() {

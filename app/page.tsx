@@ -61,7 +61,7 @@ export default async function Home() {
               src="/assets/hobby-trail-hero-final.png"
               alt=""
               fill
-              preload
+              priority
               sizes="100vw"
             />
             <video
@@ -70,10 +70,10 @@ export default async function Home() {
               loop
               muted
               playsInline
-              preload="metadata"
+              preload="none"
               poster="/assets/hobby-trail-hero-final.png"
             >
-              <source src="/assets/hobby-trail-hero-video.mp4" type="video/mp4" />
+              <source src="/assets/hobby-trail-hero-video.mp4" type="video/mp4" media="(min-width: 769px)" />
               Your browser does not support background video.
             </video>
           </div>

@@ -1,3 +1,6 @@
+import { isSameOrigin } from "@/lib/cms/request-security";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+
 type FormType = "contact" | "newsletter" | "vendor";
 
 const webhookVariables: Record<FormType, string> = {
@@ -8,12 +11,6 @@ const webhookVariables: Record<FormType, string> = {
 
 const validTypes = new Set<FormType>(["contact", "newsletter", "vendor"]);
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function isSameOrigin(request: Request) {
-  const origin = request.headers.get("origin");
-  if (!origin) return true;
-  return new URL(origin).host === new URL(request.url).host;
-}
 
 function sanitizePayload(value: unknown) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
@@ -32,6 +29,15 @@ export async function POST(request: Request, { params }: { params: Promise<{ typ
   const { type: rawType } = await params;
   if (!validTypes.has(rawType as FormType)) return Response.json({ message: "Unknown form." }, { status: 404 });
   if (!isSameOrigin(request)) return Response.json({ message: "Invalid submission origin." }, { status: 403 });
+
+  const clientIp = getClientIp(request);
+  const rateLimit = checkRateLimit(`forms:${clientIp}`, 5, 10 * 60 * 1000);
+  if (!rateLimit.allowed) {
+    return Response.json(
+      { message: "Too many submissions. Please wait a few minutes before trying again." },
+      { status: 429, headers: { "Retry-After": Math.ceil((rateLimit.resetAt - Date.now()) / 1000).toString() } }
+    );
+  }
 
   const contentLength = Number(request.headers.get("content-length") ?? 0);
   if (contentLength > 32_000) return Response.json({ message: "Submission is too large." }, { status: 413 });

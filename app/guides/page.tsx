@@ -6,7 +6,11 @@ import { PageHero } from "@/components/page-hero";
 import { PageShell } from "@/components/page-shell";
 import { getGuides } from "@/lib/content";
 
-export const metadata: Metadata = { title: "Guides", description: "Practical, beginner-friendly guides for collecting, gaming, creators, card care, and local hobby events." };
+export const metadata: Metadata = {
+  title: "Guides",
+  description: "Practical, beginner-friendly guides for collecting, gaming, creators, card care, and local hobby events.",
+  alternates: { canonical: "/guides" },
+};
 
 export default async function GuidesPage() {
   const guides = await getGuides();

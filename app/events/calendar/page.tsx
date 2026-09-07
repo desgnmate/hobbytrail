@@ -9,6 +9,7 @@ import { getEvents } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Event calendar",
   description: "Browse upcoming Hobby Trail events by month, including TCG, collectibles, gaming, and creator gatherings.",
+  alternates: { canonical: "/events/calendar" },
 };
 
 export default async function EventsCalendarPage() {

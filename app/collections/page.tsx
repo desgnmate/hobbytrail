@@ -5,7 +5,11 @@ import { PageHero } from "@/components/page-hero";
 import { PageShell } from "@/components/page-shell";
 import { getCollections } from "@/lib/content";
 
-export const metadata: Metadata = { title: "Collections", description: "Explore TCG binders, collecting ideas, and the stories behind favorite cards." };
+export const metadata: Metadata = {
+  title: "Collections",
+  description: "Explore TCG binders, collecting ideas, and the stories behind favorite cards.",
+  alternates: { canonical: "/collections" },
+};
 
 export default async function CollectionsPage() {
   const collections = await getCollections();

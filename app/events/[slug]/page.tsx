@@ -14,7 +14,26 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const event = await getEvent(slug);
   if (!event) return {};
-  return { title: event.title, description: event.description };
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hobbytrail.example";
+  const eventImage = event.image.startsWith("http") ? event.image : `${siteUrl}${event.image}`;
+  return {
+    title: event.title,
+    description: event.description,
+    alternates: { canonical: `/events/${event.slug}` },
+    openGraph: {
+      type: "website",
+      title: event.title,
+      description: event.description,
+      url: `${siteUrl}/events/${event.slug}`,
+      images: [{ url: eventImage, alt: event.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: event.title,
+      description: event.description,
+      images: [eventImage],
+    },
+  };
 }
 
 export default async function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -24,11 +43,19 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hobbytrail.example";
   const eventImage = event.image.startsWith("http") ? event.image : `${siteUrl}${event.image}`;
 
+  const datePrefix = event.date.slice(0, 10);
+  const [endTime = "17:00", meridiem = "PM"] = (event.endTime || "5:00 PM").split(" ");
+  const [rawHour = 5, minuteValue = 0] = endTime.split(":").map(Number);
+  const hour = (rawHour % 12) + (meridiem.toUpperCase() === "PM" ? 12 : 0);
+  const endIsoString = `${datePrefix}T${String(hour).padStart(2, "0")}:${String(minuteValue).padStart(2, "0")}:00+10:00`;
+  const numericPrice = event.fee.toLowerCase().includes("free") ? "0" : (event.fee.replace(/[^0-9.]/g, "") || "0");
+
   const eventJsonLd = {
     "@context": "https://schema.org",
     "@type": "Event",
     name: event.title,
     startDate: event.date,
+    endDate: endIsoString,
     eventStatus: "https://schema.org/EventScheduled",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {
@@ -36,9 +63,20 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
       name: event.venue,
       address: { "@type": "PostalAddress", addressLocality: event.city, addressRegion: "Victoria", addressCountry: "AU" },
     },
+    organizer: {
+      "@type": "Organization",
+      name: "Hobby Trail",
+      url: siteUrl,
+    },
     description: event.description,
     image: eventImage,
-    offers: { "@type": "Offer", price: event.fee === "Free" ? "0" : event.fee.replace(/[^0-9]/g, ""), priceCurrency: "AUD", availability: event.ticketStatus === "Sold out" ? "https://schema.org/SoldOut" : "https://schema.org/InStock", url: event.ticketUrl ?? `${siteUrl}/events/${event.slug}` },
+    offers: {
+      "@type": "Offer",
+      price: numericPrice,
+      priceCurrency: "AUD",
+      availability: event.ticketStatus === "Sold out" ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
+      url: event.ticketUrl ?? `${siteUrl}/events/${event.slug}`,
+    },
   };
 
   return (
@@ -84,7 +122,10 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
             </aside>
           </div>
         </div>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd).replace(/</g, "\\u003c") }}
+        />
       </article>
     </PageShell>
   );

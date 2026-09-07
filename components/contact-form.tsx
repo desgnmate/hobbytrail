@@ -1,10 +1,21 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 type FormState = "idle" | "submitting" | "error" | "success";
 
-export function ContactForm({ initialTopic = "General question" }: { initialTopic?: string }) {
+export function ContactForm() {
+  const searchParams = useSearchParams();
+  const topic = searchParams.get("topic");
+  const initialTopic =
+    topic === "event"
+      ? "Submit an event"
+      : topic === "collection"
+        ? "Feature a collection"
+        : topic === "partnership"
+          ? "Partnership"
+          : "General question";
   const [state, setState] = useState<FormState>("idle");
   const [message, setMessage] = useState("We usually reply within two business days.");
 

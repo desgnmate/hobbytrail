@@ -4,7 +4,11 @@ import Link from "next/link";
 import { ArrowRight, HandHeart, ShieldCheck, UsersThree } from "@phosphor-icons/react/dist/ssr";
 import { PageShell } from "@/components/page-shell";
 
-export const metadata: Metadata = { title: "About", description: "Meet Hobby Trail, the event platform connecting Pokémon, TCG, collectibles, gaming, creator, and hobby communities." };
+export const metadata: Metadata = {
+  title: "About",
+  description: "Meet Hobby Trail, the event platform connecting Pokémon, TCG, collectibles, gaming, creator, and hobby communities.",
+  alternates: { canonical: "/about" },
+};
 
 export default function AboutPage() {
   return (

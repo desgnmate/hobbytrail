@@ -18,6 +18,7 @@ const body = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://hobbytrail.example"),
+  alternates: { canonical: "/" },
   title: { default: "Hobby Trail | Find your place in the hobby", template: "%s | Hobby Trail" },
   description: "Events for Pokémon, TCGs, collectibles, gaming, creators, vendors, and hobby communities.",
   openGraph: {
@@ -25,6 +26,12 @@ export const metadata: Metadata = {
     title: "Hobby Trail",
     description: "Collect what you love. Find your people.",
     images: [{ url: "/assets/hobby-trail-hero-final.png", width: 1920, height: 1024, alt: "Hobby Trail mascot exploring a mountain trail" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hobby Trail",
+    description: "Collect what you love. Find your people.",
+    images: ["/assets/hobby-trail-hero-final.png"],
   },
   icons: { icon: "/assets/brand/logo-badge.png", apple: "/assets/brand/logo-badge.png" },
 };
@@ -41,13 +48,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   };
 
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`} data-scroll-behavior="smooth">
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body>
         <SmoothScroll />
         <a className="skip-link" href="#main-content">Skip to content</a>
         {children}
         <TrailGuideWidget />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c") }}
+        />
       </body>
     </html>
   );

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { List, X } from "@phosphor-icons/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const links = [
   { href: "/events", label: "Events" },
@@ -17,12 +17,42 @@ const links = [
 export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handlePointerDown);
+
+    // Prevent background scrolling while mobile nav is active
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [open]);
 
   return (
     <header className={`site-header${overlay ? " site-header--overlay" : ""}`}>
-      <nav className="site-nav" aria-label="Main navigation">
+      <nav ref={navRef} className="site-nav" aria-label="Main navigation">
         <Link className="site-nav__logo" href="/" aria-label="Hobby Trail home" onClick={() => setOpen(false)}>
-          <Image src="/assets/brand/logo-wordmark.png" alt="Hobby Trail wordmark" width={973} height={408} />
+          <Image src="/assets/brand/logo-wordmark.png" alt="Hobby Trail wordmark" width={973} height={408} priority />
         </Link>
 
         <button

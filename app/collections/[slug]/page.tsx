@@ -11,7 +11,27 @@ export async function generateStaticParams() { return (await getCollections()).m
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const collection = await getCollection(slug);
-  return collection ? { title: collection.title, description: collection.summary } : {};
+  if (!collection) return {};
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hobbytrail.example";
+  const imageUrl = collection.image.startsWith("http") ? collection.image : `${siteUrl}${collection.image}`;
+  return {
+    title: collection.title,
+    description: collection.summary,
+    alternates: { canonical: `/collections/${collection.slug}` },
+    openGraph: {
+      type: "website",
+      title: collection.title,
+      description: collection.summary,
+      url: `${siteUrl}/collections/${collection.slug}`,
+      images: [{ url: imageUrl, alt: collection.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: collection.title,
+      description: collection.summary,
+      images: [imageUrl],
+    },
+  };
 }
 
 export default async function CollectionDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -19,7 +39,11 @@ export default async function CollectionDetailPage({ params }: { params: Promise
   const collection = await getCollection(slug);
   if (!collection) notFound();
   const collections = await getCollections();
-  const related = collections.find((item) => item.slug !== collection.slug)!;
+  const currentIndex = collections.findIndex((item) => item.slug === collection.slug);
+  const nextItem =
+    collections.length > 1 && currentIndex !== -1
+      ? collections[(currentIndex + 1) % collections.length]
+      : null;
 
   return (
     <PageShell>
@@ -33,7 +57,7 @@ export default async function CollectionDetailPage({ params }: { params: Promise
               <p>{collection.summary}</p>
               <p className="collection-detail__curator">Curated by <strong>{collection.curator}</strong></p>
             </div>
-            <div className="collection-detail__cover"><Image src={collection.image} alt={`Open binder from ${collection.title}`} fill preload sizes="(max-width: 820px) 100vw, 50vw" /></div>
+            <div className="collection-detail__cover"><Image src={collection.image} alt={`Open binder from ${collection.title}`} fill priority sizes="(max-width: 820px) 100vw, 50vw" /></div>
           </header>
 
           <div className="collection-story">
@@ -49,10 +73,12 @@ export default async function CollectionDetailPage({ params }: { params: Promise
             </div>
           </div>
 
-          <section className="related-panel">
-            <div><span>Continue exploring</span><h2>{related.title}</h2><p>{related.summary}</p></div>
-            <Link className="button button--yellow" href={`/collections/${related.slug}`}>Next collection <ArrowRight size={18} /></Link>
-          </section>
+          {nextItem && (
+            <section className="related-panel">
+              <div><span>Continue exploring</span><h2>{nextItem.title}</h2><p>{nextItem.summary}</p></div>
+              <Link className="button button--yellow" href={`/collections/${nextItem.slug}`}>Next collection <ArrowRight size={18} /></Link>
+            </section>
+          )}
         </div>
       </article>
     </PageShell>
