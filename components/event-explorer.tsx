@@ -58,7 +58,7 @@ export function EventExplorer({ events }: { events: HobbyEvent[] }) {
                   <span><MapPin size={18} weight="fill" /> {event.venue}, {event.city}</span>
                   <span><UsersThree size={18} weight="fill" /> {event.level}</span>
                 </div>
-                <div className="event-index-card__actions"><Link className="button button--light" href={`/events/${event.slug}`}>View event <ArrowRight size={18} /></Link><TicketCta event={event} /></div>
+                <div className="event-index-card__actions"><Link className="button button--light" href={`/events/${event.slug}`} prefetch={true}>View event <ArrowRight size={18} /></Link><TicketCta event={event} /></div>
               </div>
             </article>
           ))}

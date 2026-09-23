@@ -19,7 +19,7 @@ export default function ContactPage() {
       <section className="content-section contact-page"><div className="content-container contact-page__grid">
         <div className="contact-page__intro">
           <h2>What happens next</h2>
-          <div><EnvelopeSimple size={28} weight="fill" /><p><strong>Your message is reviewed by a person.</strong><br />Choose the closest topic so it reaches the right place.</p></div>
+          <div><EnvelopeSimple size={28} weight="fill" /><p><strong>Your message is reviewed by a person.</strong><br />Choose the closest topic or email <a className="text-link" href="mailto:hello@hobbytrail.com.au">hello@hobbytrail.com.au</a>.</p></div>
           <div><Timer size={28} weight="fill" /><p><strong>Expect a reply within two business days.</strong><br />Event submissions may take longer while details are verified.</p></div>
           <div><MapPin size={28} weight="fill" /><p><strong>Include exact event information.</strong><br />Date, timezone, venue, fee, registration link, and organizer contact help us verify a listing.</p></div>
         </div>

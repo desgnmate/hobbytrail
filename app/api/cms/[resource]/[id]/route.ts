@@ -10,7 +10,7 @@ const publicPaths: Record<CmsResource, string[]> = {
   events: ["/", "/events", "/events/calendar"],
   collections: ["/", "/collections"],
   guides: ["/", "/guides"],
-  sponsors: ["/", "/about"],
+  sponsors: ["/", "/about", "/sponsors"],
   testimonials: ["/", "/about"],
   settings: ["/", "/about", "/contact"],
 };

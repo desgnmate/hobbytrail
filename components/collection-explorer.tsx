@@ -34,16 +34,16 @@ export function CollectionExplorer({ collections }: { collections: Collection[] 
       {filtered.length ? (
         <div className="collection-index-grid">
           {filtered.map((collection, index) => (
-            <article className={`collection-index-card collection-index-card--${(index % 3) + 1}`} key={collection.slug}>
-              <Link className="collection-index-card__image" href={`/collections/${collection.slug}`}>
-                <Image src={collection.image} alt={`A preview of ${collection.title}`} fill sizes="(max-width: 760px) 100vw, 33vw" />
+            <article className="collection-index-card" key={collection.slug}>
+              <Link className="collection-index-card__image" href={`/collections/${collection.slug}`} prefetch={true}>
+                <Image src={collection.image} alt={`A preview of ${collection.title}`} fill priority={index < 3} sizes="(max-width: 680px) 100vw, (max-width: 1080px) 50vw, 33vw" />
               </Link>
               <div>
                 <p className="collection-index-card__meta">{collection.game} / {collection.era}</p>
-                <h2><Link href={`/collections/${collection.slug}`}>{collection.title}</Link></h2>
+                <h2><Link href={`/collections/${collection.slug}`} prefetch={true}>{collection.title}</Link></h2>
                 <p>{collection.summary}</p>
                 <p className="collection-index-card__curator">Curated by {collection.curator}</p>
-                <Link className="text-link" href={`/collections/${collection.slug}`}>Open collection <ArrowRight size={18} /></Link>
+                <Link className="text-link" href={`/collections/${collection.slug}`} prefetch={true}>Open collection <ArrowRight size={18} /></Link>
               </div>
             </article>
           ))}

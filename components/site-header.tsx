@@ -11,6 +11,7 @@ const links = [
   { href: "/collections", label: "Collections" },
   { href: "/guides", label: "Guides" },
   { href: "/vendors", label: "Vendors" },
+  { href: "/sponsors", label: "Sponsors" },
   { href: "/about", label: "About" },
 ];
 
@@ -51,7 +52,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
   return (
     <header className={`site-header${overlay ? " site-header--overlay" : ""}`}>
       <nav ref={navRef} className="site-nav" aria-label="Main navigation">
-        <Link className="site-nav__logo" href="/" aria-label="Hobby Trail home" onClick={() => setOpen(false)}>
+        <Link className="site-nav__logo" href="/" prefetch={true} aria-label="Hobby Trail home" onClick={() => setOpen(false)}>
           <Image src="/assets/brand/logo-wordmark.png" alt="Hobby Trail wordmark" width={973} height={408} priority />
         </Link>
 
@@ -71,16 +72,17 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             <Link
               key={link.href}
               href={link.href}
+              prefetch={true}
               className={pathname.startsWith(link.href) ? "is-active" : ""}
               onClick={() => setOpen(false)}
             >
               {link.label}
             </Link>
           ))}
-          <Link className="nav-contact" href="/contact" onClick={() => setOpen(false)}>
+          <Link className="nav-contact" href="/contact" prefetch={true} onClick={() => setOpen(false)}>
             Contact
           </Link>
-          <Link className="button button--yellow nav-cta" href="/events#tickets" onClick={() => setOpen(false)}>
+          <Link className="button button--yellow nav-cta" href="/events#tickets" prefetch={true} onClick={() => setOpen(false)}>
             Buy tickets
           </Link>
         </div>

@@ -4,7 +4,7 @@ import { getCollections, getEvents, getGuides } from "@/lib/content";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [events, collections, guides] = await Promise.all([getEvents(), getCollections(), getGuides()]);
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hobbytrail.example";
-  const routes = ["", "/events", "/events/calendar", "/collections", "/guides", "/vendors", "/about", "/contact", "/search", "/privacy", "/terms", "/accessibility"];
+  const routes = ["", "/events", "/events/calendar", "/collections", "/guides", "/vendors", "/sponsors", "/about", "/contact", "/search", "/privacy", "/terms", "/accessibility"];
   const now = new Date();
 
   return [

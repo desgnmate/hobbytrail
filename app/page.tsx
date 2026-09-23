@@ -2,15 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  BookOpen,
   CardsThree,
   Clock,
-  Flag,
   FolderOpen,
   Handshake,
   MapPin,
   Palette,
-  ShieldCheck,
   Star,
   Storefront,
   UsersThree,
@@ -35,6 +32,7 @@ const collectionArtwork = [
 ];
 
 const guideArtwork = [
+  "/stock/guide-protect-cards.jpg",
   "/stock/events-card-table.jpg",
   "/stock/guide-card-condition.jpg",
 ];
@@ -80,13 +78,13 @@ export default async function Home() {
           <div className="home-hero__content">
             <div className="home-hero__copy">
               <h1 id="home-hero-title">
-                <span>Collect what you love.</span>
-                <span>Find your people.</span>
+                <span>Where hobbies bring</span>
+                <span>people together.</span>
               </h1>
-              <p>Discover Melbourne events, inspiring collections, and practical guides to help you enjoy every step of your collecting journey.</p>
+              <p>Discover events, explore new interests, meet communities, and find more ways to enjoy the hobbies you love.</p>
               <div className="button-row">
-                <Link className="button button--yellow" href="/events#tickets">Buy tickets <ArrowRight size={19} weight="bold" /></Link>
-                <Link className="button button--light" href="/collections">Explore collections</Link>
+                <Link className="button button--yellow" href="/events#tickets" prefetch={true}>Buy tickets <ArrowRight size={19} weight="bold" /></Link>
+                <Link className="button button--light" href="/collections" prefetch={true}>Explore collections</Link>
               </div>
             </div>
           </div>
@@ -99,7 +97,7 @@ export default async function Home() {
               <p className="section-intro">Dive into events, explore collections, and get practical guides to fuel your next adventure.</p>
             </Reveal>
             <div className="trail-choices__grid">
-              <Reveal className="trail-card trail-card--event" delay={0.04}>
+              <Reveal className="trail-card trail-card--event" delay={0.02}>
                 <Image
                   className="trail-card__scene"
                   src="/generated/trail-events-clean.png"
@@ -110,11 +108,11 @@ export default async function Home() {
                 <div className="trail-card__copy">
                   <h3>Find an event</h3>
                   <p>TCG tournaments, collectible fairs, gaming sessions, creator workshops, and community meetups.</p>
-                  <Link className="button button--black" href="/events">Explore events <ArrowRight size={18} /></Link>
+                  <Link className="button button--black" href="/events" prefetch={true}>Explore events <ArrowRight size={18} /></Link>
                 </div>
                 <div className="trail-event-list">
                   {trailEvents.map((event, index) => (
-                    <Link className="trail-mini-event" href={`/events/${event.slug}`} key={event.slug}>
+                    <Link className="trail-mini-event" href={`/events/${event.slug}`} prefetch={true} key={event.slug}>
                       <Image
                         src={trailEventImages[index]}
                         alt=""
@@ -149,7 +147,7 @@ export default async function Home() {
               </div>
 
               <div className="trail-choices__stack">
-                <Reveal className="trail-card trail-card--small" delay={0.1}>
+                <Reveal className="trail-card trail-card--small" delay={0.04}>
                   <Image
                     className="trail-card__scene"
                     src="/generated/trail-collections-clean.png"
@@ -160,10 +158,10 @@ export default async function Home() {
                   <div className="trail-card__small-copy">
                     <h3>Explore collections</h3>
                     <p>Curated binders and inspiration for every kind of collector.</p>
-                    <Link className="button button--black" href="/collections">Browse collections <ArrowRight size={17} /></Link>
+                    <Link className="button button--black" href="/collections" prefetch={true}>Browse collections <ArrowRight size={17} /></Link>
                   </div>
                 </Reveal>
-                <Reveal className="trail-card trail-card--small trail-card--cream" delay={0.16}>
+                <Reveal className="trail-card trail-card--small trail-card--cream" delay={0.06}>
                   <Image
                     className="trail-card__scene"
                     src="/generated/trail-guides-clean.png"
@@ -174,7 +172,7 @@ export default async function Home() {
                   <div className="trail-card__small-copy">
                     <h3>Start collecting</h3>
                     <p>Practical guides and how-tos to help you begin with confidence.</p>
-                    <Link className="button button--black" href="/guides">Read guides <ArrowRight size={17} /></Link>
+                    <Link className="button button--black" href="/guides" prefetch={true}>Read guides <ArrowRight size={17} /></Link>
                   </div>
                 </Reveal>
               </div>
@@ -260,9 +258,9 @@ export default async function Home() {
               </Reveal>
               <div className="collection-stack">
                 {collections.map((collection, index) => (
-                  <Reveal key={collection.slug} className={`collection-strip-motion collection-strip-motion--${index + 1}`} delay={0.08 + index * 0.06}>
+                  <Reveal key={collection.slug} className={`collection-strip-motion collection-strip-motion--${index + 1}`} delay={index * 0.03}>
                     <div className={`collection-strip collection-strip--${index + 1}`}>
-                      <Link className="collection-strip__link" href={`/collections/${collection.slug}`}>
+                      <Link className="collection-strip__link" href={`/collections/${collection.slug}`} prefetch={true}>
                         <Image src={collectionArtwork[index]} alt={`${collection.title} collection detail`} width={320} height={400} />
                         <div>
                           <h3>{collection.title}</h3>
@@ -281,78 +279,28 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="section section--cream collector-path" aria-labelledby="path-title">
-          <div className="container">
-            <Reveal className="collector-path__heading">
-              <h2 id="path-title">Every collector starts somewhere.</h2>
-              <p className="section-intro">New to the hobby? Follow the trail to build confidence,<br />protect your collection, and connect with others.</p>
-            </Reveal>
-            <div className="collector-path__grid">
-              <svg className="collector-path__trail" viewBox="0 0 1200 620" preserveAspectRatio="none" aria-hidden="true">
-                <path d="M110 135 C320 70 360 205 250 290 C120 390 250 485 455 535 C650 585 720 545 795 435 C865 330 1015 380 1070 275 C1120 180 1010 120 930 130" />
-              </svg>
-              <span className="path-flag path-flag--one" aria-hidden="true"><Flag size={25} weight="fill" /></span>
-              <span className="path-flag path-flag--two" aria-hidden="true"><Flag size={25} weight="fill" /></span>
-              <span className="path-flag path-flag--three" aria-hidden="true"><Flag size={25} weight="fill" /></span>
-              <span className="path-flag path-flag--four" aria-hidden="true"><Flag size={25} weight="fill" /></span>
-              <Reveal className="path-stop path-stop--one">
-                <CardsThree size={72} />
-                <h3>Choose a game</h3>
-                <p>Explore different games and find the one that clicks with you.</p>
-              </Reveal>
-              <Reveal className="path-stop path-stop--two" delay={0.08}>
-                <BookOpen size={72} />
-                <h3>Build your binder</h3>
-                <p>Organize your cards and build a collection you&apos;re proud of.</p>
-              </Reveal>
-              <div className="collector-path__mascot">
-                <Image src="/generated/collector-journey-cartoon.png" alt="Cartoon Hobby Trail collector mascot hiking along a mountain trail" width={724} height={543} />
-              </div>
-              <Reveal className="path-stop path-stop--three" delay={0.12}>
-                <ShieldCheck size={72} />
-                <h3>Protect your cards</h3>
-                <p>Use the right sleeves and storage to keep your cards in top shape.</p>
-              </Reveal>
-              <Reveal className="path-stop path-stop--four" delay={0.18}>
-                <UsersThree size={72} />
-                <h3>Meet the community</h3>
-                <p>Connect with other collectors, share your passion, and have fun.</p>
-              </Reveal>
-            </div>
-          </div>
-        </section>
-
         <section className="section section--white guides-section" aria-labelledby="guides-title">
           <div className="container">
             <Reveal>
               <h2 id="guides-title">Practical guides</h2>
               <p className="section-intro">Clear, step-by-step advice to help you collect smarter,<br />protect your cards, and get more from the hobby.</p>
             </Reveal>
-            <div className="guides-showcase">
-              <Reveal className="guide-feature">
-                <Link href={`/guides/${guides[0].slug}`} className="guide-feature__image">
-                  <Image src="/stock/guide-protect-cards.jpg" alt="Collector drawing from a stack of sleeved trading cards" fill sizes="(max-width: 860px) 100vw, 58vw" />
-                </Link>
-                <h3><Link href={`/guides/${guides[0].slug}`}>{guides[0].title}</Link></h3>
-                <p className="article-meta"><span><FolderOpen size={17} weight="fill" />{guides[0].category}</span><span><Clock size={17} weight="fill" />{guides[0].readTime}</span></p>
-                <p>Learn the essential tools and best practices to keep your cards safe now and for years to come.</p>
-                <Link className="button button--yellow guide-feature__cta" href="/guides">View all guides <ArrowRight size={20} weight="bold" /></Link>
-              </Reveal>
-              <div className="guide-list">
-                {guides.slice(1).map((guide, index) => (
-                  <Reveal key={guide.slug} className="guide-row" delay={0.08 + index * 0.06}>
-                    <Link href={`/guides/${guide.slug}`} className="guide-row__image" aria-label={`Read ${guide.title}`}>
-                      <Image src={guideArtwork[index]} alt="" fill sizes="(max-width: 860px) 100vw, 26vw" />
-                    </Link>
-                    <div>
-                      <h3><Link href={`/guides/${guide.slug}`}>{guide.title}</Link></h3>
-                      <p className="article-meta"><span><FolderOpen size={16} weight="fill" />{guide.category}</span><span><Clock size={16} weight="fill" />{guide.readTime}</span></p>
-                      <p>{guide.summary}</p>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
+            <div className="home-guides-grid">
+              {guides.map((guide, index) => (
+                <Reveal key={guide.slug} className="home-guide-card" delay={index * 0.03}>
+                  <Link href={`/guides/${guide.slug}`} prefetch={true} className="home-guide-card__image" aria-label={`Read ${guide.title}`}>
+                    <Image src={guideArtwork[index]} alt="" fill sizes="(max-width: 700px) 100vw, (max-width: 1080px) 50vw, 33vw" />
+                  </Link>
+                  <div className="home-guide-card__body">
+                    <p className="article-meta"><span><FolderOpen size={16} weight="fill" />{guide.category}</span><span><Clock size={16} weight="fill" />{guide.readTime}</span></p>
+                    <h3><Link href={`/guides/${guide.slug}`} prefetch={true}>{guide.title}</Link></h3>
+                    <p>{guide.summary}</p>
+                    <Link className="text-link" href={`/guides/${guide.slug}`} prefetch={true}>Read guide <ArrowRight size={17} weight="bold" /></Link>
+                  </div>
+                </Reveal>
+              ))}
             </div>
+            <div className="guides-section__action"><Link className="button button--yellow" href="/guides" prefetch={true}>View all guides <ArrowRight size={20} weight="bold" /></Link></div>
           </div>
         </section>
 
@@ -362,7 +310,7 @@ export default async function Home() {
               <p className="detail-kicker">Event partners</p>
               <h2 id="partners-title">Partners who help the trail grow.</h2>
               <p className="section-intro">Hobby Trail works with the Melbourne spaces, retailers, creators, and community partners who make every gathering more useful and welcoming.</p>
-              <Link className="button button--black" href="/contact?topic=partnership">Become a partner <ArrowRight size={18} /></Link>
+              <Link className="button button--black" href="/contact?topic=partnership" prefetch={true}>Become a partner <ArrowRight size={18} /></Link>
             </Reveal>
             <div className="sponsor-list" aria-label="Featured sponsors">
               {sponsors.length ? sponsors.map((sponsor) => {
@@ -380,7 +328,7 @@ export default async function Home() {
                   <div className="partner-empty__card"><Palette size={24} weight="fill" /><strong>Creators</strong><span>Artists, makers, and storytellers</span></div>
                   <div className="partner-empty__card"><UsersThree size={24} weight="fill" /><strong>Communities</strong><span>Clubs, leagues, and local groups</span></div>
                 </div>
-                <div className="partner-empty__footer"><span>Based in Melbourne, Victoria</span><Link className="text-link" href="/contact?topic=partnership">Start a conversation <ArrowRight size={17} /></Link></div>
+                <div className="partner-empty__footer"><span>Based in Melbourne, Victoria</span><Link className="text-link" href="/contact?topic=partnership" prefetch={true}>Start a conversation <ArrowRight size={17} /></Link></div>
               </div>}
             </div>
           </div>
@@ -391,14 +339,14 @@ export default async function Home() {
             <Reveal className="testimonials-section__heading"><p className="detail-kicker">From the community</p><h2 id="testimonials-title">Good events leave a story behind.</h2></Reveal>
             {testimonials.length ? <div className="testimonial-list">{testimonials.map((testimonial) => <blockquote key={`${testimonial.name}-${testimonial.quote}`}><p>“{testimonial.quote}”</p><footer><strong>{testimonial.name}</strong><span>{testimonial.role}{testimonial.organization ? `, ${testimonial.organization}` : ""}</span></footer></blockquote>)}</div> : <div className="testimonial-empty">
               <div className="testimonial-empty__visual"><Image src="/stock/events-card-table.jpg" alt="Collectors playing a card game together at a community table" fill sizes="(max-width: 820px) 100vw, 42vw" /><div><span>Melbourne, VIC</span><strong>Stories from the table</strong></div></div>
-              <div className="testimonial-empty__body"><p className="detail-kicker">Verified stories, coming soon</p><h3>Have a Hobby Trail moment to share?</h3><p>We are gathering attendee, vendor, and partner stories with permission. The best part of an event often starts after the first hello.</p><div className="testimonial-empty__audiences"><span><UsersThree size={17} weight="fill" /> Attendees</span><span><Storefront size={17} weight="fill" /> Vendors</span><span><Handshake size={17} weight="fill" /> Partners</span></div><Link className="text-link text-link--large" href="/contact">Share your Hobby Trail experience <ArrowRight size={19} /></Link></div>
+              <div className="testimonial-empty__body"><p className="detail-kicker">Verified stories, coming soon</p><h3>Have a Hobby Trail moment to share?</h3><p>We are gathering attendee, vendor, and partner stories with permission. The best part of an event often starts after the first hello.</p><div className="testimonial-empty__audiences"><span><UsersThree size={17} weight="fill" /> Attendees</span><span><Storefront size={17} weight="fill" /> Vendors</span><span><Handshake size={17} weight="fill" /> Partners</span></div><Link className="text-link text-link--large" href="/contact" prefetch={true}>Share your Hobby Trail experience <ArrowRight size={19} /></Link></div>
             </div>}
           </div>
         </section>
 
         <section className="about-strip" aria-labelledby="home-about-title">
           <div className="container about-strip__content">
-            <div className="about-strip__copy"><p className="detail-kicker detail-kicker--light">About Hobby Trail</p><h2 id="home-about-title">More than cards. A place for every kind of hobbyist.</h2><p>Hobby Trail brings Pokémon and TCGs together with collectibles, gaming, creators, vendors, and the communities that make each interest worth sharing.</p><div className="button-row"><Link className="button button--light" href="/about">Why Hobby Trail <ArrowRight size={18} /></Link><Link className="button button--yellow" href="/vendors">Vendor expression of interest</Link></div><nav className="about-strip__route" aria-label="Explore Hobby Trail"><Link href="/events"><span>01</span><strong>Find a room</strong><ArrowRight size={16} /></Link><Link href="/collections"><span>02</span><strong>See collections</strong><ArrowRight size={16} /></Link><Link href="/guides"><span>03</span><strong>Learn together</strong><ArrowRight size={16} /></Link></nav></div>
+            <div className="about-strip__copy"><p className="detail-kicker detail-kicker--light">About Hobby Trail</p><h2 id="home-about-title">More than cards. A place for every kind of hobbyist.</h2><p>Hobby Trail brings Pokémon and TCGs together with collectibles, gaming, creators, vendors, and the communities that make each interest worth sharing.</p><div className="button-row"><Link className="button button--light" href="/about" prefetch={true}>Why Hobby Trail <ArrowRight size={18} /></Link><Link className="button button--yellow" href="/vendors" prefetch={true}>Vendor expression of interest</Link></div><nav className="about-strip__route" aria-label="Explore Hobby Trail"><Link href="/events" prefetch={true}><span>01</span><strong>Find a room</strong><ArrowRight size={16} /></Link><Link href="/collections" prefetch={true}><span>02</span><strong>See collections</strong><ArrowRight size={16} /></Link><Link href="/guides" prefetch={true}><span>03</span><strong>Learn together</strong><ArrowRight size={16} /></Link></nav></div>
             <div className="about-strip__visual"><span className="about-strip__badge"><MapPin size={15} weight="fill" /> Melbourne, Australia</span><div className="about-strip__art"><Image src="/assets/brand/logo-mascot.png" alt="Hobby Trail mascot carrying cards, a camera, and an art brush" width={924} height={1013} /></div></div>
           </div>
         </section>

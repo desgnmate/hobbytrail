@@ -49,7 +49,7 @@ export default async function CollectionDetailPage({ params }: { params: Promise
     <PageShell>
       <article className="detail-page collection-detail">
         <div className="detail-page__container">
-          <Link className="back-link" href="/collections"><ArrowLeft size={18} /> All collections</Link>
+          <Link className="back-link" href="/collections" prefetch={true}><ArrowLeft size={18} /> All collections</Link>
           <header className="collection-detail__header">
             <div>
               <div className="detail-kicker">{collection.game} / {collection.era}</div>
@@ -76,7 +76,7 @@ export default async function CollectionDetailPage({ params }: { params: Promise
           {nextItem && (
             <section className="related-panel">
               <div><span>Continue exploring</span><h2>{nextItem.title}</h2><p>{nextItem.summary}</p></div>
-              <Link className="button button--yellow" href={`/collections/${nextItem.slug}`}>Next collection <ArrowRight size={18} /></Link>
+              <Link className="button button--yellow" href={`/collections/${nextItem.slug}`} prefetch={true}>Next collection <ArrowRight size={18} /></Link>
             </section>
           )}
         </div>

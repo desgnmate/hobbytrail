@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function VendorsPage() {
   return (
     <PageShell>
-      <PageHero title={["Bring your corner", "of the hobby."]} text="Hobby retailers, collectors, artists, creators, gaming communities, and specialist makers can register their interest in future Hobby Trail events." aside={<div className="hero-stamp"><Storefront size={38} weight="fill" /><span>Vendor EOI</span><strong>Open</strong><small>Future events</small></div>} />
+      <PageHero title={["Bring your corner", "of the hobby."]} text="Hobby retailers, makers, artists, creators, collectors, clubs, communities, and businesses can register their interest in future Hobby Trail events." aside={<div className="hero-stamp"><Storefront size={38} weight="fill" /><span>Vendor EOI</span><strong>Open</strong><small>Future events</small></div>} />
       <section className="content-section vendor-page">
         <div className="content-container vendor-page__grid">
           <div className="vendor-page__intro">

@@ -8,7 +8,7 @@ import { getEvents } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Events",
-  description: "Find Pokémon, TCG, collectibles, gaming, creator, trading, and community events near you.",
+  description: "Explore hobby events, new interests, and welcoming communities across Melbourne, Australia.",
   alternates: { canonical: "/events" },
 };
 
@@ -17,8 +17,8 @@ export default async function EventsPage() {
   return (
     <PageShell>
       <PageHero
-        title={["Find your next", "gathering."]}
-        text="Play, trade, shop, learn, and meet hobby communities in welcoming spaces across Melbourne, Australia."
+        title={["Discover your", "next hobby."]}
+        text="Explore, collect, create, trade, and connect with communities that share what you love."
         aside={<div className="hero-stamp"><CalendarBlank size={36} weight="fill" /><span>Next event</span><strong>Sep 12</strong><small><MapPin size={15} /> South Wharf</small></div>}
       />
       <section className="content-section events-index" id="tickets">
