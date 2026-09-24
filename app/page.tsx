@@ -17,6 +17,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Reveal } from "@/components/reveal";
 import { TicketCta } from "@/components/ticket-cta";
 import { CollectionCarousel } from "@/components/collection-carousel";
+import { HomeHero } from "@/components/home-hero";
 import { getCollections, getEvents, getGuides, getSponsors, getTestimonials } from "@/lib/content";
 
 const trailEventImages = [
@@ -52,43 +53,7 @@ export default async function Home() {
     <>
       <SiteHeader overlay />
       <main id="main-content">
-        <section className="home-hero" aria-labelledby="home-hero-title">
-          <div className="home-hero__visual" aria-hidden="true">
-            <Image
-              className="home-hero__poster"
-              src="/assets/hobby-trail-hero-final.png"
-              alt=""
-              fill
-              priority
-              sizes="100vw"
-            />
-            <video
-              className="home-hero__media"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="none"
-              poster="/assets/hobby-trail-hero-final.png"
-            >
-              <source src="/assets/0925.mp4" type="video/mp4" />
-              Your browser does not support background video.
-            </video>
-          </div>
-          <div className="home-hero__content">
-            <div className="home-hero__copy">
-              <h1 id="home-hero-title">
-                <span>Where hobbies bring</span>
-                <span>people together.</span>
-              </h1>
-              <p>Discover events, explore new interests, meet communities, and find more ways to enjoy the hobbies you love.</p>
-              <div className="button-row">
-                <Link className="button button--yellow" href="/events#tickets" prefetch={true}>Buy tickets <ArrowRight size={19} weight="bold" /></Link>
-                <Link className="button button--light" href="/collections" prefetch={true}>Explore collections</Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HomeHero />
 
         <section className="section section--white trail-choices" aria-labelledby="trail-title">
           <div className="container">
