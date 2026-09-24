@@ -71,7 +71,7 @@ export default async function Home() {
               preload="none"
               poster="/assets/hobby-trail-hero-final.png"
             >
-              <source src="/assets/hobby-trail-hero-video.mp4" type="video/mp4" media="(min-width: 769px)" />
+              <source src="/assets/0925.mp4" type="video/mp4" />
               Your browser does not support background video.
             </video>
           </div>

@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     type: "website",
     title: "Hobby Trail",
     description: "Where hobbies bring people together.",
-    images: [{ url: "/assets/hobby-trail-hero-final.png", width: 1920, height: 1024, alt: "Hobby Trail mascot exploring a mountain trail" }],
+    images: [{ url: "/assets/hobby-trail-hero-final.png", width: 1920, height: 1080, alt: "Hobby Trail mascot exploring a mountain trail" }],
   },
   twitter: {
     card: "summary_large_image",

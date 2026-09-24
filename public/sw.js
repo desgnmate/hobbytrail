@@ -66,7 +66,9 @@ self.addEventListener("fetch", (event) => {
     url.pathname.startsWith("/studio") ||
     url.pathname.startsWith("/api") ||
     url.pathname.includes("/_next/webpack-hmr") ||
-    url.pathname.includes("hot-update")
+    url.pathname.includes("hot-update") ||
+    url.pathname.endsWith(".mp4") ||
+    request.headers.has("range")
   ) {
     return;
   }

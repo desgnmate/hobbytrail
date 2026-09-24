@@ -10,3 +10,4 @@ artifacts/
 .vercel
 .env*
 supabase/.temp/
+/0925.mp4
