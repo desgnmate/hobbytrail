@@ -3,79 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react";
-import { useEffect, useRef, useState } from "react";
-
-// Video total duration: 21.33 seconds
-// 9:20 mark (~9.20s): sunset/night transition starts -> gradual shift from black to white
-// 17:28 mark (~17.28s): sunrise/day transition starts -> gradual shift from white to black
-const NIGHT_START_TIME = 9.2;
-const DAY_START_TIME = 17.28;
 
 export function HomeHero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isNight, setIsNight] = useState(false);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    let callbackId: number | null = null;
-    let isMounted = true;
-
-    const evaluateTime = (currentTime: number) => {
-      const night = currentTime >= NIGHT_START_TIME && currentTime < DAY_START_TIME;
-      setIsNight((prev) => (prev !== night ? night : prev));
-    };
-
-    const handleTimeUpdate = () => {
-      evaluateTime(video.currentTime);
-    };
-
-    // Primary: requestVideoFrameCallback for exact frame-level accuracy
-    const rVFC =
-      "requestVideoFrameCallback" in video
-        ? (video as unknown as {
-            requestVideoFrameCallback: (
-              cb: (now: DOMHighResTimeStamp, metadata: { mediaTime: number }) => void
-            ) => number;
-            cancelVideoFrameCallback?: (id: number) => void;
-          })
-        : null;
-
-    if (rVFC) {
-      const onVideoFrame = (_now: DOMHighResTimeStamp, metadata: { mediaTime: number }) => {
-        if (!isMounted) return;
-        evaluateTime(metadata.mediaTime);
-        callbackId = rVFC.requestVideoFrameCallback(onVideoFrame);
-      };
-      callbackId = rVFC.requestVideoFrameCallback(onVideoFrame);
-    }
-
-    // Fallbacks and scrub/loop listeners
-    video.addEventListener("timeupdate", handleTimeUpdate);
-    video.addEventListener("seeking", handleTimeUpdate);
-    video.addEventListener("seeked", handleTimeUpdate);
-
-    // Initial check
-    evaluateTime(video.currentTime);
-
-    return () => {
-      isMounted = false;
-      video.removeEventListener("timeupdate", handleTimeUpdate);
-      video.removeEventListener("seeking", handleTimeUpdate);
-      video.removeEventListener("seeked", handleTimeUpdate);
-      if (callbackId !== null && rVFC?.cancelVideoFrameCallback) {
-        rVFC.cancelVideoFrameCallback(callbackId);
-      }
-    };
-  }, []);
-
   return (
-    <section
-      className={`home-hero ${isNight ? "home-hero--night" : ""}`}
-      data-theme={isNight ? "night" : "day"}
-      aria-labelledby="home-hero-title"
-    >
+    <section className="home-hero" aria-labelledby="home-hero-title">
       <div className="home-hero__visual" aria-hidden="true">
         <Image
           className="home-hero__poster"
@@ -86,7 +17,6 @@ export function HomeHero() {
           sizes="100vw"
         />
         <video
-          ref={videoRef}
           className="home-hero__media"
           autoPlay
           loop
@@ -95,7 +25,7 @@ export function HomeHero() {
           preload="none"
           poster="/assets/hobby-trail-hero-final.png"
         >
-          <source src="/assets/0925.mp4" type="video/mp4" />
+          <source src="/assets/new-hero-video.mp4" type="video/mp4" />
           Your browser does not support background video.
         </video>
       </div>
